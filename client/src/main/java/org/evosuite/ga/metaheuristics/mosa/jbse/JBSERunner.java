@@ -204,7 +204,7 @@ public class JBSERunner {
 	private static JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
 	private static String TEST_DIR;
-	private static String TARGET_DIR;
+	private static String TARGET_BIN_PATH;
 	private static String TARGET_BRANCH_CLASS;
 	private static String TARGET_BRANCH_METHOD;
 	private static int TARGET_BRANCH_BYTECODE_OFFSET;
@@ -232,7 +232,7 @@ public class JBSERunner {
 	
 	private static String run0 (String BRANCH_CLASS, String BRANCH_METHOD, int BRANCH_BYTECODE_OFFSET, int BRANCH_OCCURRENCES, 
 			String METHOD_DATA_CLASS, String METHOD_DATA_METHOD_NAME,String  METHOD_DATA_DESCR, int METHOD_OCCURRENCES, 
-			String TEST_DIRECTORY, String TARGET_DIRECTORY, String TEST_FILE, int apcId, int apcIdSuffix, String evaluatorDependencySpec) throws DecisionException, CannotBuildEngineException, 
+			String TEST_DIRECTORY, String TARGET_DIRECTORIES_AND_JARS, String TEST_FILE, int apcId, int apcIdSuffix, String evaluatorDependencySpec) throws DecisionException, CannotBuildEngineException, 
 	InitializationException, InvalidClassFileFactoryClassException, NonexistingObservedVariablesException, ClasspathException, CannotBacktrackException, 
 	CannotManageStateException, ThreadStackEmptyException, ContradictionException, EngineStuckException, FailureException, InvalidInputException  {
 		TARGET_BRANCH_CLASS = BRANCH_CLASS;
@@ -244,7 +244,7 @@ public class JBSERunner {
 		ENTRY_METHOD_OCCURRENCES = METHOD_OCCURRENCES;
 		
 		TEST_DIR = TEST_DIRECTORY;
-		TARGET_DIR = TARGET_DIRECTORY;
+		TARGET_BIN_PATH = TARGET_DIRECTORIES_AND_JARS;
 		String TEST_FILE_NAME = TEST_FILE;
 		GUIDING_TC_DATA = new GuidingTestCaseData(
 				TEST_FILE_NAME, "()V", "test0", 
@@ -270,11 +270,11 @@ public class JBSERunner {
 	}
 	
 	public JBSERunner() {		
-		String[] classpath = new String[] {
-				TARGET_DIR,
-				TEST_DIR,
-				extractClassPathEntry(jbse.jvm.RunnerBuilder.class)
-		};
+		String[] targerDirs = TARGET_BIN_PATH.split(File.pathSeparator);
+		String[] classpath = Arrays.copyOf(targerDirs, targerDirs.length + 2);
+		classpath[targerDirs.length] = TEST_DIR;
+		classpath[targerDirs.length + 1] = extractClassPathEntry(jbse.jvm.RunnerBuilder.class);
+		
 		System.out.println("Using classpath: " + Arrays.toString(classpath));
 		//LoggingUtils.getEvoLogger().info("Using classpath: " + Arrays.toString(classpath));
 		
