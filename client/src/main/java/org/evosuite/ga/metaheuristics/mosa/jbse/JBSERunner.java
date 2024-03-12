@@ -104,7 +104,7 @@ public class JBSERunner {
 					LoggingUtils.getEvoLogger().info("[JBSE] Launching external JVM: {}", System.getProperties().getProperty("java.home") + File.separator + "bin" + File.separator + "java");
 					String[] commandLine = new String[] {
 							System.getProperties().getProperty("java.home") + File.separator + "bin" + File.separator + "java", //java1.8
-
+							
 					"-classpath", extractClassPathEntry(org.evosuite.ClientProcess.class) + //evosuite-client/target/classes/
 					File.pathSeparator + ClassPathHandler.getInstance().getTargetProjectClasspath() + 
 					//":/Users/denaro/git/evosuite/sushi-lib/lib/javaparser-core-3.4.0.jar" + //needed for using java-parser on test cases
